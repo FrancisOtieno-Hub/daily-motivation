@@ -237,10 +237,14 @@ const quotes = [
   // Initialize or load shuffled quotes from localStorage
   function getShuffledQuotes() {
     let shuffled = JSON.parse(localStorage.getItem('shuffledQuotes'));
+
+    // If no shuffled array exists or empty, shuffle and store it first
     if (!shuffled || shuffled.length === 0) {
       shuffled = [...quotes]; // copy the original array
       shuffle(shuffled);
+      localStorage.setItem('shuffledQuotes', JSON.stringify(shuffled));
     }
+
     return shuffled;
   }
 
@@ -249,7 +253,7 @@ const quotes = [
     let shuffled = getShuffledQuotes();
     const nextQuote = shuffled.shift(); // take the first quote
     displayQuote(nextQuote);
-    localStorage.setItem('shuffledQuotes', JSON.stringify(shuffled));
+    localStorage.setItem('shuffledQuotes', JSON.stringify(shuffled)); // save the remaining quotes
   }
 
   // Display quote helper
@@ -336,6 +340,7 @@ const quotes = [
 </body>
 
 </html>
+
 
 
 
