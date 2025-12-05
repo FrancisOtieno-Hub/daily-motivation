@@ -33,7 +33,7 @@ git clone https://github.com/FrancisOtieno-Hub/daily-motivation.git
 ```
 daily-motivation/
 ├─ index.html       # Main HTML file embedded with CSS styles + JavaScript
-├─ assets/          # icon
+├─ icon.png         # icon
 ├─ manifest.json    # PWA manifest 
 ```
 
