@@ -120,7 +120,7 @@
       const main = document.getElementById('main');
       main.style.display = 'block';
       setTimeout(() => main.style.opacity = 1, 50); // fade-in effect
-      dailyQuote(); // Load the daily quote
+      showNextQuote(); // Show a non-repeating random quote on startup
     }, 1000);
   }, 2500);
 
@@ -226,29 +226,46 @@ const quotes = [
   {text:"Don’t wait until you’re confident to start. Start and you’ll become confident.", author:"Original"}
 ];
 
-// Display Daily Quote
-  function dailyQuote() {
-    const today = new Date();
-    const dayOfYear = Math.floor((today - new Date(today.getFullYear(),0,0))/1000/60/60/24);
-    const index = dayOfYear % quotes.length;
-    displayQuote(quotes[index]);
+ // Shuffle array helper
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
   }
 
-  // Display Random Quote
-  function randomQuote() {
-    const quoteBox = document.getElementById('quote-box');
-    quoteBox.style.opacity = 0;
-    setTimeout(() => {
-      const index = Math.floor(Math.random() * quotes.length);
-      displayQuote(quotes[index]);
-      quoteBox.style.opacity = 1;
-    }, 300);
+  // Initialize or load shuffled quotes from localStorage
+  function getShuffledQuotes() {
+    let shuffled = JSON.parse(localStorage.getItem('shuffledQuotes'));
+    if (!shuffled || shuffled.length === 0) {
+      shuffled = [...quotes]; // copy the original array
+      shuffle(shuffled);
+    }
+    return shuffled;
+  }
+
+  // Display next non-repeating quote
+  function showNextQuote() {
+    let shuffled = getShuffledQuotes();
+    const nextQuote = shuffled.shift(); // take the first quote
+    displayQuote(nextQuote);
+    localStorage.setItem('shuffledQuotes', JSON.stringify(shuffled));
   }
 
   // Display quote helper
   function displayQuote(quote) {
     document.getElementById('quote').innerText = quote.text;
     document.getElementById('author').innerText = "- " + quote.author;
+  }
+
+  // Random Quote button (also non-repeating)
+  function randomQuote() {
+    const quoteBox = document.getElementById('quote-box');
+    quoteBox.style.opacity = 0;
+    setTimeout(() => {
+      showNextQuote();
+      quoteBox.style.opacity = 1;
+    }, 300);
   }
 
   // Share Quote
@@ -289,12 +306,12 @@ const quotes = [
     const timeout = notificationTime - now;
 
     setTimeout(() => {
-      sendNotification();
-      setInterval(sendNotification, 24*60*60*1000); // Repeat every 24 hours
+      sendDailyNotification();
+      setInterval(sendDailyNotification, 24*60*60*1000); // Repeat every 24 hours
     }, timeout);
   }
 
-  function sendNotification() {
+  function sendDailyNotification() {
     const today = new Date();
     const dayOfYear = Math.floor((today - new Date(today.getFullYear(),0,0))/1000/60/60/24);
     const index = dayOfYear % quotes.length;
@@ -307,19 +324,18 @@ const quotes = [
     if(Notification.permission === "granted") scheduleDailyNotification();
   }
 
+  // Service Worker registration
   if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(reg => console.log('Service Worker registered:', reg))
-      .catch(err => console.log('Service Worker registration failed:', err));
-  });
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log('Service Worker registered:', reg))
+        .catch(err => console.log('Service Worker registration failed:', err));
+    });
   }
-  
-  // Load daily quote on page load
-  dailyQuote();
 </script>
 </body>
 
 </html>
+
 
 
