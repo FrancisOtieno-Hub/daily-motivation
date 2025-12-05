@@ -58,4 +58,4 @@ This project is open-source and free to use.
 
 ## **Contact**
 Created by **Francis Otieno**
-GitHub: [https://github.com/FrancisOtieno-Hub(https://github.com/FrancisOtieno-Hub)
+GitHub: (https://github.com/FrancisOtieno-Hub)
