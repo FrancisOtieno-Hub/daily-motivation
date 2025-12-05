@@ -91,6 +91,7 @@
   }
 </style>
 <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#f57c00">
 </head>
 <body>
 <!-- Splash Screen -->
@@ -306,10 +307,19 @@ const quotes = [
     if(Notification.permission === "granted") scheduleDailyNotification();
   }
 
+  if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('Service Worker registered:', reg))
+      .catch(err => console.log('Service Worker registration failed:', err));
+  });
+  }
+  
   // Load daily quote on page load
   dailyQuote();
 </script>
 </body>
 
 </html>
+
 
