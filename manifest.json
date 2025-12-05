@@ -1,16 +1,21 @@
 {
   "name": "Daily Motivation",
   "short_name": "Motivation",
+  "description": "Get your daily dose of inspiration and motivational quotes to start your day right.",
   "start_url": "/index.html",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#ffecd2",
   "theme_color": "#f57c00",
+  "scope": "/",
+  "lang": "en-US",
   "icons": [
     {
       "src": "icon.png",
-      "sizes": "192x192",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ]
 }
+
 
